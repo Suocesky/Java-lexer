@@ -1,0 +1,70 @@
+image: maven:latest
+
+variables:
+  MAVEN_CLI_OPTS: "--batch-mode -U"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+build:
+  stage: build
+  script:
+    - mvn $MAVEN_CLI_OPTS compile
+
+Punctuation Test:
+  stage: test
+  script:
+    - mvn $MAVEN_CLI_OPTS test -Dtest=PunctuationTokenTest.java
+  artifacts:
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+    expire_in: 10 week
+
+Keyword Test:
+  stage: test
+  script:
+    - mvn $MAVEN_CLI_OPTS test -Dtest=KeywordTokenTest.java
+  artifacts:
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+    expire_in: 10 week
+
+Special Tokens String Test:
+  stage: test
+  script:
+    - mvn $MAVEN_CLI_OPTS test -Dtest=SpecialTokenStringTest.java
+  artifacts:
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+    expire_in: 10 week
+
+# Special Tokens Test:
+#   stage: test
+#   script:
+#     - mvn $MAVEN_CLI_OPTS test -Dtest=SpecialTokenTest.java
+#   artifacts:
+#     reports:
+#       junit:
+#         - target/surefire-reports/TEST-*.xml
+#     expire_in: 10 week
+
+# Multiple Token Test:
+#   stage: test
+#   script:
+#     - mvn $MAVEN_CLI_OPTS test -Dtest=MultipleTokenTest.java
+#   artifacts:
+#     reports:
+#       junit:
+#         - target/surefire-reports/TEST-*.xml
+#     expire_in: 10 week
+
+# All Tests:
+#   stage: test
+#   script:
+#     - mvn $MAVEN_CLI_OPTS test
+#   artifacts:
+#     reports:
+#       junit:
+#         - target/surefire-reports/TEST-*.xml
+#     expire_in: 10 week
