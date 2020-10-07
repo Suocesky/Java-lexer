@@ -18,8 +18,6 @@ public class Lexer implements ILexer {
 
   List<Token> TokensList = new ArrayList<Token>();
 
-  int TokenReturnPosition = 0;
-
   /**
    * Constructors
    */
@@ -35,6 +33,7 @@ public class Lexer implements ILexer {
 
   public Token getToken() {
     // TODO add your call to the parser to get individual tokens.
+
     return null;
   }
 
