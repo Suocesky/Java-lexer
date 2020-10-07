@@ -11,12 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsb.cseweb.classes.cse131a.lexer.ILexer;
+import edu.ucsb.cseweb.classes.cse131a.lexer.Sym;
 import edu.ucsb.cseweb.classes.cse131a.lexer.Token;
 
 public class Lexer implements ILexer {
   Reader reader;
-
-  List<Token> TokensList = new ArrayList<Token>();
 
   /**
    * Constructors
@@ -33,6 +32,27 @@ public class Lexer implements ILexer {
 
   public Token getToken() {
     // TODO add your call to the parser to get individual tokens.
+    String tokenString = "";
+
+    try { 
+      // Get the character 
+      // to be read from the stream 
+      int ch; 
+  
+      // Read the first character 
+      // to this reader using read() method 
+      ch = reader.read(); 
+      tokenString += (char)ch;
+      System.out.println(tokenString);
+
+      // Sample for checking a single character Token.
+      if (tokenString.equals(";")) {
+    	  return new Token(Sym.T_SEMI, tokenString);
+      }
+    } 
+    catch (Exception e) { 
+      System.out.println(e); 
+    }
 
     return null;
   }
