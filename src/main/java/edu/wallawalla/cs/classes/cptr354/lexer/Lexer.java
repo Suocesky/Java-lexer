@@ -306,29 +306,82 @@ public class Lexer implements ILexer {
             returnToken = new Token(Sym.T_STAR, tokenString);
             break;
           // Special tokens
-          default:
-            // String literals
-            // ISSUE: string methods such as substring() and charAt() seem to change tokenString's length
-            if (tokenString == "''") {
-              return new Token(Sym.T_STR_LITERAL, "");
-            } else if (tokenString.substring(0, 1) == "'" && (tokenString.length() < 80)) {
-              return new Token(Sym.T_STR_LITERAL, tokenString);
-            } else if (tokenString == "\"\"") {
-              return new Token(Sym.T_STR_LITERAL, "");
-            } else if (tokenString.substring(0, 1) == "\"" && (tokenString.length() < 80)) {
-              return new Token(Sym.T_STR_LITERAL, tokenString);
+          // String literals
+          case "'":
+            // assign end of string to appropriately cut off source string
+            int secondQuot;
+            secondQuot = sourceString.indexOf('\'', 1);
+            String finalTokenString = "";
+            if (secondQuot == -1)
+              secondQuot = sourceString.indexOf("EOF");
+            if (secondQuot == -1)
+              secondQuot = sourceString.indexOf("\n");
+            if (secondQuot == -1 || secondQuot > 80)
+              secondQuot = 80;
+            finalTokenString += sourceString.substring(1, secondQuot);
+
+            if (finalTokenString.length() < 80) {
+              return new Token(Sym.T_STR_LITERAL, finalTokenString);
+            } else if (sourceString.indexOf("EOF") != -1) {
+              System.out.print("unterminated literal, EOF in string");
+              return new Token(Sym.T_STR_LITERAL, finalTokenString);
+            } else if (sourceString.indexOf("\n") != -1) {
+              System.out.print("unterminated literal, newline in string");
+              return new Token(Sym.T_STR_LITERAL, finalTokenString);
             } else {
-              if (tokenString.indexOf("EOF") != -1) {
-                System.out.print("unterminated literal, EOF in string");
-                return new Token(Sym.T_STR_LITERAL, tokenString.substring(1, 80));
-              } else if (tokenString.indexOf("\n") != -1) {
-                System.out.print("unterminated literal, newline in string");
-                return new Token(Sym.T_STR_LITERAL, tokenString.substring(1, 80));
-              } else {
-                System.out.print("unterminated literal");
-                return new Token(Sym.T_STR_LITERAL, tokenString.substring(1, 80));
-              }
+              System.out.print("unterminated literal");
+              return new Token(Sym.T_STR_LITERAL, finalTokenString);
             }
+          case "\"":
+            // same deal as above, just looking for a different set of quotes
+            secondQuot = sourceString.indexOf('"', 1);
+            finalTokenString = "";
+            if (secondQuot == -1)
+              secondQuot = sourceString.indexOf("EOF");
+            if (secondQuot == -1)
+              secondQuot = sourceString.indexOf("\n");
+            if (secondQuot == -1 || secondQuot > 80)
+              secondQuot = 80;
+            finalTokenString += sourceString.substring(1, secondQuot);
+
+            if (finalTokenString.length() < 80) {
+              return new Token(Sym.T_STR_LITERAL, finalTokenString);
+            } else if (sourceString.indexOf("EOF") != -1) {
+              System.out.print("unterminated literal, EOF in string");
+              return new Token(Sym.T_STR_LITERAL, finalTokenString);
+            } else if (sourceString.indexOf("\n") != -1) {
+              System.out.print("unterminated literal, newline in string");
+              return new Token(Sym.T_STR_LITERAL, finalTokenString);
+            } else {
+              System.out.print("unterminated literal");
+              return new Token(Sym.T_STR_LITERAL, finalTokenString);
+            }
+            // ISSUE: string methods such as substring() and charAt() seem to change
+            // tokenString's length
+            // if (tokenString == "''") {
+            // return new Token(Sym.T_STR_LITERAL, "");
+            // } else if (tokenString.substring(0, 1) == "'" && (tokenString.length() < 80))
+            // {
+            // return new Token(Sym.T_STR_LITERAL, tokenString);
+            // } else if (tokenString == "\"\"") {
+            // return new Token(Sym.T_STR_LITERAL, "");
+            // } else if (tokenString.substring(0, 1) == "\"" && (tokenString.length() <
+            // 80)) {
+            // return new Token(Sym.T_STR_LITERAL, tokenString);
+            // } else {
+            // if (tokenString.indexOf("EOF") != -1) {
+            // System.out.print("unterminated literal, EOF in string");
+            // return new Token(Sym.T_STR_LITERAL, tokenString.substring(1, 80));
+            // } else if (tokenString.indexOf("\n") != -1) {
+            // System.out.print("unterminated literal, newline in string");
+            // return new Token(Sym.T_STR_LITERAL, tokenString.substring(1, 80));
+            // } else {
+            // System.out.print("unterminated literal");
+            // return new Token(Sym.T_STR_LITERAL, tokenString.substring(1, 80));
+            // }
+            // return new Token(Sym.T_STR_LITERAL, tokenString);
+
+            // }
         }
       } catch (Exception e) {
         System.out.println(e);
