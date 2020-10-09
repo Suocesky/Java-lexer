@@ -9,6 +9,8 @@ import java.io.StringReader;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import edu.ucsb.cseweb.classes.cse131a.lexer.ILexer;
 import edu.ucsb.cseweb.classes.cse131a.lexer.Sym;
@@ -38,6 +40,38 @@ public class Lexer implements ILexer {
     }
   }
 
+  public static String removecom(String sourceString){
+    String newString = "";
+
+    if (sourceString.contains("\"")) {
+      if (sourceString.indexOf("\"") != 0) {
+
+          String[] stringParts = sourceString.split("\"");
+
+          for (int i = 0; i < stringParts.length; i++) {
+
+              if ((i & 1) == 0) {
+                  Pattern commentaryPattern = Pattern.compile("(/\\*((.|\n)*?)\\*/)|//.*");
+
+                  Matcher m = commentaryPattern.matcher(stringParts[i]);
+
+                  sourceString += m.replaceAll("");
+              } else {
+                  sourceString += "\"" + stringParts[i] + "\"";
+              }
+          }
+      }
+  } else {
+      Pattern commentaryPattern = Pattern.compile("(/\\*((.|\n)*?)\\*/)|//.*");
+
+      Matcher m = commentaryPattern.matcher(sourceString);
+
+      newString += m.replaceAll("");
+  }
+
+
+  return newString;
+  }
   /**
    * Constructors
    */
