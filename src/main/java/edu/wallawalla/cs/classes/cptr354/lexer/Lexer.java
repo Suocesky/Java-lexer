@@ -308,6 +308,7 @@ public class Lexer implements ILexer {
           // Special tokens
           default:
             // String literals
+            // ISSUE: string methods such as substring() and charAt() seem to change tokenString's length
             if (tokenString == "''") {
               return new Token(Sym.T_STR_LITERAL, "");
             } else if (tokenString.substring(0, 1) == "'" && (tokenString.length() < 80)) {
