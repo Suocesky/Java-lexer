@@ -73,6 +73,7 @@ public class Lexer implements ILexer {
   public Token getToken() {
     int endString = startString+1;
     String tokenString;
+    Token returnToken = null;
     while (endString <= sourceString.length()) {
       try {
         tokenString = sourceString.substring(startString, endString);
@@ -80,143 +81,201 @@ public class Lexer implements ILexer {
         switch (tokenString) {
           // Keywords
           case "ARRAY":
-            return new Token(Sym.T_ARRAY, tokenString);
+            returnToken = new Token(Sym.T_ARRAY, tokenString);
+            break;
           case "BEGIN":
-            return new Token(Sym.T_BEGIN, tokenString);
+            returnToken = new Token(Sym.T_BEGIN, tokenString);
+            break;
           case "BY":
-            return new Token(Sym.T_BY, tokenString);
+            returnToken = new Token(Sym.T_BY, tokenString);
+            break;
           case "CASE":
-            return new Token(Sym.T_CASE, tokenString);
+            returnToken = new Token(Sym.T_CASE, tokenString);
+            break;
           case "CONST":
-            return new Token(Sym.T_CONST, tokenString);
+            returnToken = new Token(Sym.T_CONST, tokenString);
+            break;
           case "DIV":
-            return new Token(Sym.T_DIV, tokenString);
+            returnToken = new Token(Sym.T_DIV, tokenString);
+            break;
           case "DO":
-            return new Token(Sym.T_DO, tokenString);
+            returnToken = new Token(Sym.T_DO, tokenString);
+            break;
           case "ELSE":
-            return new Token(Sym.T_ELSE, tokenString);
+            returnToken = new Token(Sym.T_ELSE, tokenString);
+            break;
           case "ELSIF":
-            return new Token(Sym.T_ELSIF, tokenString);
+            returnToken = new Token(Sym.T_ELSIF, tokenString);
+            break;
           case "END":
-            return new Token(Sym.T_END, tokenString);
+            returnToken = new Token(Sym.T_END, tokenString);
+            break;
           case "EXIT":
-            return new Token(Sym.T_EXIT, tokenString);
+            returnToken = new Token(Sym.T_EXIT, tokenString);
+            break;
           case "FOR":
-            return new Token(Sym.T_FOR, tokenString);
+            returnToken = new Token(Sym.T_FOR, tokenString);
+            break;
           case "IF":
-            return new Token(Sym.T_IF, tokenString);
+            returnToken = new Token(Sym.T_IF, tokenString);
+            break;
           case "IMPORT":
-            return new Token(Sym.T_IMPORT, tokenString);
+            returnToken = new Token(Sym.T_IMPORT, tokenString);
+            break;
           case "IN":
-            return smartSwitch(5, endString, "INTEGER", Sym.T_IN, Sym.T_INTEGER);
+          returnToken = smartSwitch(5, endString, "INTEGER", Sym.T_IN, Sym.T_INTEGER);
+            break;
           case "IS":
-            return new Token(Sym.T_IS, tokenString);
+            returnToken = new Token(Sym.T_IS, tokenString);
+            break;
           case "LOOP":
-            return new Token(Sym.T_LOOP, tokenString);
+            returnToken = new Token(Sym.T_LOOP, tokenString);
+            break;
           case "MOD":
-            return smartSwitch(3, endString, "MODULE", Sym.T_MOD, Sym.T_MODULE);
+          returnToken = smartSwitch(3, endString, "MODULE", Sym.T_MOD, Sym.T_MODULE);
+            break;
           case "NIL":
-            return new Token(Sym.T_NIL, tokenString);
+            returnToken = new Token(Sym.T_NIL, tokenString);
+            break;
           case "OF":
-            return new Token(Sym.T_OF, tokenString);
+            returnToken = new Token(Sym.T_OF, tokenString);
+            break;
           case "OR":
-            return new Token(Sym.T_OR, tokenString);
+            returnToken = new Token(Sym.T_OR, tokenString);
+            break;
           case "POINTER":
-            return new Token(Sym.T_POINTER, tokenString);
+            returnToken = new Token(Sym.T_POINTER, tokenString);
+            break;
           case "PROCEDURE":
-            return new Token(Sym.T_PROCEDURE, tokenString);
+            returnToken = new Token(Sym.T_PROCEDURE, tokenString);
+            break;
           case "RECORD":
-            return new Token(Sym.T_RECORD, tokenString);
+            returnToken = new Token(Sym.T_RECORD, tokenString);
+            break;
           case "REPEAT":
-            return new Token(Sym.T_REPEAT, tokenString);
+            returnToken = new Token(Sym.T_REPEAT, tokenString);
+            break;
           case "RETURN":
-            return new Token(Sym.T_RETURN, tokenString);
+            returnToken = new Token(Sym.T_RETURN, tokenString);
+            break;
           case "THEN":
-            return new Token(Sym.T_THEN, tokenString);
+            returnToken = new Token(Sym.T_THEN, tokenString);
+            break;
           case "TO":
-            return new Token(Sym.T_TO, tokenString);
+            returnToken = new Token(Sym.T_TO, tokenString);
+            break;
           case "TYPE":
-            return new Token(Sym.T_TYPE, tokenString);
+            returnToken = new Token(Sym.T_TYPE, tokenString);
+            break;
           case "UNTIL":
-            return new Token(Sym.T_UNTIL, tokenString);
+            returnToken = new Token(Sym.T_UNTIL, tokenString);
+            break;
           case "VAR":
-            return new Token(Sym.T_VAR, tokenString);
+            returnToken = new Token(Sym.T_VAR, tokenString);
+            break;
           case "WHILE":
-            return new Token(Sym.T_WHILE, tokenString);
+            returnToken = new Token(Sym.T_WHILE, tokenString);
+            break;
           case "WITH":
-            return new Token(Sym.T_WITH, tokenString);
+            returnToken = new Token(Sym.T_WITH, tokenString);
+            break;
           // Predeclared identifiers
           case "BOOLEAN":
-            return new Token(Sym.T_BOOLEAN, tokenString);
+            returnToken = new Token(Sym.T_BOOLEAN, tokenString);
+            break;
           case "CHAR":
-            return new Token(Sym.T_CHAR, tokenString);
+            returnToken = new Token(Sym.T_CHAR, tokenString);
+            break;
           case "FALSE":
-            return new Token(Sym.T_FALSE, tokenString);
+            returnToken = new Token(Sym.T_FALSE, tokenString);
+            break;
           case "NEW":
-            return new Token(Sym.T_NEW, tokenString);
+            returnToken = new Token(Sym.T_NEW, tokenString);
+            break;
           case "REAL":
-            return new Token(Sym.T_REAL, tokenString);
+            returnToken = new Token(Sym.T_REAL, tokenString);
+            break;
           case "TRUE":
-            return new Token(Sym.T_TRUE, tokenString);
+            returnToken = new Token(Sym.T_TRUE, tokenString);
+            break;
           // Punctuation
           case "&":
-            return new Token(Sym.T_AMPERSAND, tokenString);
+            returnToken = new Token(Sym.T_AMPERSAND, tokenString);
+            break;
           case "^":
-            return new Token(Sym.T_ARROW, tokenString);
+            returnToken = new Token(Sym.T_ARROW, tokenString);
+            break;
           case ":":
-          return smartSwitch(1, endString, ":=", Sym.T_COLON, Sym.T_ASSIGN);
-          // return new Token(Sym.T_COLON, tokenString);
+            returnToken = smartSwitch(1, endString, ":=", Sym.T_COLON, Sym.T_ASSIGN);
+            break;
           case "|":
-            return new Token(Sym.T_BAR, tokenString);
+            returnToken = new Token(Sym.T_BAR, tokenString);
+            break;
           case ",":
-            return new Token(Sym.T_COMMA, tokenString);
+            returnToken = new Token(Sym.T_COMMA, tokenString);
+            break;
           case ".":
-            return smartSwitch(1, endString, "..", Sym.T_DOT, Sym.T_DOTDOT);
-            // return new Token(Sym.T_DOT, tokenString);
+          returnToken = smartSwitch(1, endString, "..", Sym.T_DOT, Sym.T_DOTDOT);
+            break;
           case "..":
-            return new Token(Sym.T_DOTDOT, tokenString);
+            returnToken = new Token(Sym.T_DOTDOT, tokenString);
+            break;
           case "=":
-            return new Token(Sym.T_EQU, tokenString);
+            returnToken = new Token(Sym.T_EQU, tokenString);
+            break;
           case ">":
-            return smartSwitch(1, endString, ">=", Sym.T_GT, Sym.T_GTE);
+            returnToken = smartSwitch(1, endString, ">=", Sym.T_GT, Sym.T_GTE);
+            break;
           case "{":
-            return new Token(Sym.T_LBRACE, tokenString);
+            returnToken = new Token(Sym.T_LBRACE, tokenString);
+            break;
           case "[":
-            return new Token(Sym.T_LBRACKET, tokenString);
+            returnToken = new Token(Sym.T_LBRACKET, tokenString);
+            break;
           case "(":
-            return new Token(Sym.T_LPAREN, tokenString);
+            returnToken = new Token(Sym.T_LPAREN, tokenString);
+            break;
           case "<":
-            return smartSwitch(1, endString, "<=", Sym.T_LT, Sym.T_LTE);
+            returnToken = smartSwitch(1, endString, "<=", Sym.T_LT, Sym.T_LTE);
+            break;
           case "-":
-            return new Token(Sym.T_MINUS, tokenString);
+            returnToken = new Token(Sym.T_MINUS, tokenString);
+            break;
           case "#":
-            return new Token(Sym.T_NEQ, tokenString);
+            returnToken = new Token(Sym.T_NEQ, tokenString);
+            break;
           case "+":
-            return new Token(Sym.T_PLUS, tokenString);
+            returnToken = new Token(Sym.T_PLUS, tokenString);
+            break;
           case "}":
-            return new Token(Sym.T_RBRACE, tokenString);
+            returnToken = new Token(Sym.T_RBRACE, tokenString);
+            break;
           case "]":
-            return new Token(Sym.T_RBRACKET, tokenString);
+            returnToken = new Token(Sym.T_RBRACKET, tokenString);
+            break;
           case ")":
-            return new Token(Sym.T_RPAREN, tokenString);
+            returnToken = new Token(Sym.T_RPAREN, tokenString);
+            break;
           case ";":
-            return new Token(Sym.T_SEMI, tokenString);
+            returnToken = new Token(Sym.T_SEMI, tokenString);
+            break;
           case "~":
-            return new Token(Sym.T_TILDE, tokenString);
+            returnToken = new Token(Sym.T_TILDE, tokenString);
+            break;
           case "/":
-            return new Token(Sym.T_SLASH, tokenString);
+            returnToken = new Token(Sym.T_SLASH, tokenString);
+            break;
           case "*":
-            return new Token(Sym.T_STAR, tokenString);
-
+            returnToken = new Token(Sym.T_STAR, tokenString);
+            break;
         }
-
       } catch (Exception e) {
         System.out.println(e);
       }
       endString++;
     }
-    startString = endString;
-    return null;
+    startString = endString-2;
+    return returnToken;
   }
 
 }
