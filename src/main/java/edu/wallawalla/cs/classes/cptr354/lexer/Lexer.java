@@ -31,45 +31,47 @@ public class Lexer implements ILexer {
       // to this reader using read() method
       while (ch != -1) {
         ch = reader.read();
-        if (ch != -1)
+        if (ch != -1) {
           sourceString += (char) ch;
-        System.out.println(sourceString);
+          System.out.println(sourceString);
+        }
       }
     } catch (Exception e) {
       System.out.println(e);
     }
   }
 
-  private String removecom(){
+  private String removecom() {
     String newString = "";
 
     if (sourceString.contains("\"")) {
       if (sourceString.indexOf("\"") != 0) {
 
-          String[] stringParts = sourceString.split("\"");
+        String[] stringParts = sourceString.split("\"");
 
-          for (int i = 0; i < stringParts.length; i++) {
+        for (int i = 0; i < stringParts.length; i++) {
 
-              if ((i & 1) == 0) {
-                  Pattern commentaryPattern = Pattern.compile("(/\\*((.|\n)*?)\\*/)|//.*");
+          if ((i & 1) == 0) {
+            Pattern commentaryPattern = Pattern.compile("(/\\*((.|\n)*?)\\*/)|//.*");
 
-                  Matcher m = commentaryPattern.matcher(stringParts[i]);
+            Matcher m = commentaryPattern.matcher(stringParts[i]);
 
-                  sourceString += m.replaceAll("");
-              } else {
-                  sourceString += "\"" + stringParts[i] + "\"";
-              }
+            sourceString += m.replaceAll("");
+          } else {
+            sourceString += "\"" + stringParts[i] + "\"";
           }
+        }
       }
     } else {
-        Pattern commentaryPattern = Pattern.compile("(/\\*((.|\n)*?)\\*/)|//.*");
+      Pattern commentaryPattern = Pattern.compile("(/\\*((.|\n)*?)\\*/)|//.*");
 
-        Matcher m = commentaryPattern.matcher(sourceString);
+      Matcher m = commentaryPattern.matcher(sourceString);
 
-        newString += m.replaceAll("");
+      newString += m.replaceAll("");
     }
     return newString;
   }
+
   /**
    * Constructors
    */
@@ -98,22 +100,21 @@ public class Lexer implements ILexer {
   }
 
   private Token smartSwitch(int offset, int endString, String fullMatch, int smallToken, int largeToken) {
-    if (endString+offset <= sourceString.length() && sourceString.substring(startString, endString+offset).equals(fullMatch)) { 
-      return new Token(largeToken, sourceString.substring(startString, endString+offset));
-    }
-    else {
+    if (endString + offset <= sourceString.length()
+        && sourceString.substring(startString, endString + offset).equals(fullMatch)) {
+      return new Token(largeToken, sourceString.substring(startString, endString + offset));
+    } else {
       return new Token(smallToken, sourceString.substring(startString, endString));
     }
   }
 
   public Token getToken() {
-    int endString = startString+1;
+    int endString = startString + 1;
     String tokenString;
     Token returnToken = null;
     while (endString <= sourceString.length()) {
       try {
         tokenString = sourceString.substring(startString, endString);
-        // Sample for checking a single character Token.
         switch (tokenString) {
           // Keywords
           case "ARRAY":
@@ -159,7 +160,7 @@ public class Lexer implements ILexer {
             returnToken = new Token(Sym.T_IMPORT, tokenString);
             break;
           case "IN":
-          returnToken = smartSwitch(5, endString, "INTEGER", Sym.T_IN, Sym.T_INTEGER);
+            returnToken = smartSwitch(5, endString, "INTEGER", Sym.T_IN, Sym.T_INTEGER);
             break;
           case "IS":
             returnToken = new Token(Sym.T_IS, tokenString);
@@ -168,7 +169,7 @@ public class Lexer implements ILexer {
             returnToken = new Token(Sym.T_LOOP, tokenString);
             break;
           case "MOD":
-          returnToken = smartSwitch(3, endString, "MODULE", Sym.T_MOD, Sym.T_MODULE);
+            returnToken = smartSwitch(3, endString, "MODULE", Sym.T_MOD, Sym.T_MODULE);
             break;
           case "NIL":
             returnToken = new Token(Sym.T_NIL, tokenString);
@@ -251,7 +252,7 @@ public class Lexer implements ILexer {
             returnToken = new Token(Sym.T_COMMA, tokenString);
             break;
           case ".":
-          returnToken = smartSwitch(1, endString, "..", Sym.T_DOT, Sym.T_DOTDOT);
+            returnToken = smartSwitch(1, endString, "..", Sym.T_DOT, Sym.T_DOTDOT);
             break;
           case "..":
             returnToken = new Token(Sym.T_DOTDOT, tokenString);
@@ -304,13 +305,37 @@ public class Lexer implements ILexer {
           case "*":
             returnToken = new Token(Sym.T_STAR, tokenString);
             break;
+          // Special tokens
+          default:
+            // String literals
+            // ISSUE: string methods such as substring() and charAt() seem to change tokenString's length
+            if (tokenString == "''") {
+              return new Token(Sym.T_STR_LITERAL, "");
+            } else if (tokenString.substring(0, 1) == "'" && (tokenString.length() < 80)) {
+              return new Token(Sym.T_STR_LITERAL, tokenString);
+            } else if (tokenString == "\"\"") {
+              return new Token(Sym.T_STR_LITERAL, "");
+            } else if (tokenString.substring(0, 1) == "\"" && (tokenString.length() < 80)) {
+              return new Token(Sym.T_STR_LITERAL, tokenString);
+            } else {
+              if (tokenString.indexOf("EOF") != -1) {
+                System.out.print("unterminated literal, EOF in string");
+                return new Token(Sym.T_STR_LITERAL, tokenString.substring(1, 80));
+              } else if (tokenString.indexOf("\n") != -1) {
+                System.out.print("unterminated literal, newline in string");
+                return new Token(Sym.T_STR_LITERAL, tokenString.substring(1, 80));
+              } else {
+                System.out.print("unterminated literal");
+                return new Token(Sym.T_STR_LITERAL, tokenString.substring(1, 80));
+              }
+            }
         }
       } catch (Exception e) {
         System.out.println(e);
       }
       endString++;
     }
-    startString = endString-2;
+    startString = endString - 2;
     return returnToken;
   }
 
