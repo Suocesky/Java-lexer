@@ -40,7 +40,7 @@ public class Lexer implements ILexer {
     }
   }
 
-  public static String removecom(String sourceString){
+  private String removecom(){
     String newString = "";
 
     if (sourceString.contains("\"")) {
@@ -61,16 +61,14 @@ public class Lexer implements ILexer {
               }
           }
       }
-  } else {
-      Pattern commentaryPattern = Pattern.compile("(/\\*((.|\n)*?)\\*/)|//.*");
+    } else {
+        Pattern commentaryPattern = Pattern.compile("(/\\*((.|\n)*?)\\*/)|//.*");
 
-      Matcher m = commentaryPattern.matcher(sourceString);
+        Matcher m = commentaryPattern.matcher(sourceString);
 
-      newString += m.replaceAll("");
-  }
-
-
-  return newString;
+        newString += m.replaceAll("");
+    }
+    return newString;
   }
   /**
    * Constructors
@@ -78,21 +76,25 @@ public class Lexer implements ILexer {
   public Lexer(Reader input) {
     reader = new BufferedReader(input);
     readerToString();
+    removecom();
   }
 
   public Lexer(Path filepath) throws FileNotFoundException {
     this(new FileReader(filepath.toString()));
     readerToString();
+    removecom();
   }
 
   public Lexer(String inputString) {
     this(new StringReader(inputString));
     readerToString();
+    removecom();
   }
 
   public Lexer() {
     this(new InputStreamReader(System.in));
     readerToString();
+    removecom();
   }
 
   private Token smartSwitch(int offset, int endString, String fullMatch, int smallToken, int largeToken) {
