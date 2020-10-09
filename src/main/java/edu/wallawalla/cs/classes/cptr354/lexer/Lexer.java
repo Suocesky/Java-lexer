@@ -40,6 +40,11 @@ public class Lexer implements ILexer {
     }
   }
 
+  private void removeUnessarySpaces() {
+    String regex = "\\s+(?=((\\\\[\\\\\"]|[^\\\\\"])*\"(\\\\[\\\\\"]|[^\\\\\"])*\")*(\\\\[\\\\\"]|[^\\\\\"])*$)";
+    sourceString = sourceString.replaceAll(regex, "");
+  }
+
   private String removecom(){
     String newString = "";
 
@@ -77,24 +82,28 @@ public class Lexer implements ILexer {
     reader = new BufferedReader(input);
     readerToString();
     removecom();
+    removeUnessarySpaces();
   }
 
   public Lexer(Path filepath) throws FileNotFoundException {
     this(new FileReader(filepath.toString()));
     readerToString();
     removecom();
+    removeUnessarySpaces();
   }
 
   public Lexer(String inputString) {
     this(new StringReader(inputString));
     readerToString();
     removecom();
+    removeUnessarySpaces();
   }
 
   public Lexer() {
     this(new InputStreamReader(System.in));
     readerToString();
     removecom();
+    removeUnessarySpaces();
   }
 
   private Token smartSwitch(int offset, int endString, String fullMatch, int smallToken, int largeToken) {
