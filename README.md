@@ -51,8 +51,10 @@ git remote add upstream git@gitlab.cs.wallawalla.edu:cptr354/lab_compiler.git
 ## Getting started
 
 Fork this project on gitlab and then clone your fork to your computer.
-Once you have it cloned, start eclipse and import an _existing maven project_.
-Now you are ready to start working on **Lab 4** in the _docs_ folder.
+Once you have it cloned the repository, start **Eclipse** IDE.
+Once in a workspace (a default workspace is open when starting the program), navigate to _File_ then select _import_.
+The window ill open with a list options, select "Maven > Existing Maven Project" and find the project that is located in your cloned repository.
+Now you are ready to start working defined in **docs/lab_4.md**.
 
 Every time you commit code and push it to gitlab, the test will be automatically executed.
 You can find the results by look at the **CI/CD** menu option.
