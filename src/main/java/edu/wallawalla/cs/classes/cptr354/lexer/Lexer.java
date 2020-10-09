@@ -16,6 +16,8 @@ import edu.ucsb.cseweb.classes.cse131a.lexer.Token;
 
 public class Lexer implements ILexer {
   Reader reader;
+  String sourceString = "";
+  int startString = 0;
 
   /**
    * Constructors
