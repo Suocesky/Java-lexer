@@ -45,13 +45,14 @@ public class Lexer implements ILexer {
       // to be read from the stream
       int ch = 0;
 
-      // Read the first character
+      // Read one character at a time
       // to this reader using read() method
       while (ch != -1) {
         ch = reader.read();
-        if (ch != -1)
+        if (ch != -1) {
           tokenString += (char) ch;
-        System.out.println(tokenString);
+          System.out.println(tokenString);
+        }
       }
       // Sample for checking a single character Token.
       switch (tokenString) {
@@ -192,11 +193,9 @@ public class Lexer implements ILexer {
           return new Token(Sym.T_SLASH, tokenString);
         case "*":
           return new Token(Sym.T_STAR, tokenString);
-
+        // Special tokens
+        
       }
-      // if (tokenString.equals(";")) {
-      // return new Token(Sym.T_SEMI, tokenString);
-      // }
     } catch (Exception e) {
       System.out.println(e);
     }
